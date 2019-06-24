@@ -1,0 +1,56 @@
+version: "3"
+
+services:
+  grafana:
+    image: grafana/grafana
+    restart: always
+    volumes:
+      - grafana:/usr/share/grafana
+    ports:
+      - 3000:3000
+    environment:
+      GF_AUTH_ANONYMOUS_ENABLED: "true"
+      GF_AUTH_ANONYMOUS_ORG_NAME: "Main Org."
+      GF_AUTH_ANONYMOUS_ORG_ROLE: Admin
+      GF_AUTH_BASIC_ENABLED: "false"
+  influxdb:
+    image: influxdb/influxdb
+    restart: always
+    volumes:
+      - influxdb:/var/lib/influxdb
+    ports:
+      - 8086:8086
+      - 8083:8083
+    environment:
+      INFLUXDB_DB: hoyaas
+      INFLUXDB_USER: hoyaas
+      INFLUXDB_USER_PASSWORD: secret
+      INFLUXDB_ADMIN_ENABLED: "true"
+  app:
+    build: ./app
+    restart: always
+    volumes:
+      - ./app:/app/node
+    ports:
+      - 3003:3000
+    depends_on:
+      - influxdb
+  api:
+    build: ./api
+    restart: always
+    ports:
+      - 3002:80
+    depends_on:
+      - influxdb
+  cron:
+    build: ./cron
+    restart: always
+    depends_on:
+      - influxdb
+      - api
+
+volumes:
+  grafana:
+    driver: local
+  influxdb:
+    driver: local

@@ -1,0 +1,3 @@
+[submodule "api/tracer"]
+	path = api/tracer
+	url = git@github.com:xxv/tracer.git

@@ -1,0 +1,2 @@
+# * * * * * root /usr/local/bin/node /app/test.js >> /var/log/cron.log 2>&1
+*/1 * * * * curl -—silent "http://localhost:3000/write" >/dev/null 2>&1

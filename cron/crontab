@@ -1,0 +1,1 @@
+*/1 * * * * root /usr/local/bin/node /app/node/index.js >> /dev/stdout 2>&1
